@@ -1,0 +1,36 @@
+{
+  "name": "meggotio",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node server.js npm start"
+  },
+  "dependencies": {
+    "express": "latest",
+    "mongoose": "~3.6.13",
+    "body-parser": "~1.0.1"
+  },
+  "description": "This is my personal website.",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meggot/Meggot.github.io.git"
+  },
+  "keywords": [
+    "cv",
+    "software",
+    "engineering",
+    "computer",
+    "science",
+    "london",
+    "programmer",
+    "java",
+    "developer"
+  ],
+  "author": "Bradley PH Williams",
+  "license": "UNLICENCED",
+  "bugs": {
+    "url": "https://github.com/Meggot/Meggot.github.io/issues"
+  },
+  "homepage": "https://github.com/Meggot/Meggot.github.io#readme"
+}
