@@ -1,25 +1,118 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-     <meta http-equiv="Content-Type" content="text/html; utf-8;"/>
-     <link rel="stylesheet" href= "../static/styles.css" type="text/css"></link>
-     <title>Bradley PH Williams</title>
-</head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-left">
-        <h1 class="navbarTitle"> Bradley <span style="font-size:20px">PH</span> Williams </h1>
-        <navbar>
-            <ul class="nav navbar-nav">
-            <li><a class="navbar-active" href="index">About</a></li>
-            <li><a href="portfolio">Portfolio</a></li>
-            <li><a href="blog">Blog</a></li>
-            </ul>
-        </navbar>
-</div>
-<div id="page-wrap">
-    <h1> Here's my portfolio..
-    </h1>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; utf-8;"/>
+        <link rel="stylesheet" href= "../static/styles.css" type="text/css"></link>
+        <title>Bradley PH Williams</title>
+
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-left">
+            <h1 class="navbarTitle"> Bradley <span style="font-size:20px">PH</span> Williams </h1>
+            <navbar>
+                <ul class="nav navbar-nav">
+                    <li><a class="navbar-active" href="index">About</a></li>
+                    <li><a href="portfolio">Portfolio</a></li>
+                    <li><a href="blog">Blog</a></li>
+                </ul>
+            </navbar>
         </div>
-</body>
+        <div id="page-wrap">
+            <h1> Here's my portfolio..
+            </h1>
+            <div>
+                <h2> Sound Orbiter </h2>
+            <button onclick="startOrbiter()"> Begin the orbit. </button>
+            <button onclick="stopOrbiter()"> Stop the orbit. </button>
+            
+            <audio id="planetBeep">
+                <source src="../static/planetBeep.wav" type="audio/wav">
+                    Your browser does not support the audio functionality :(
+            </audio>
+        
+            <div style="border: 1px solid" class="gameArea">
+            <canvas id="canvasOne" width="500" height="500"></canvas>
+                <script>
+                    var x = document.getElementById("planetBeep"); 
+                    
+                    var radius = 100;
+                    var circle = {centerX: 250, centerY: 250, radius: 125, angle: 0}
+                    var ball = {x: 0, y: 0, speed: .01};
+                    var orbitActive = false;
+                    
+                    theCanvas = document.getElementById("canvasOne");
+                    context = theCanvas.getContext("2d");
+
+                    function startOrbiter() {
+                        if (!orbitActive)
+                        {
+                            orbitActive = true;
+                            window.myInterval = setInterval(drawScreen, 1);
+                        }
+                    }
+
+                    function stopOrbiter() {
+                        if (orbitActive)
+                        {
+                            orbitActive = false;
+                            window.clearInterval(window.myInterval);
+                        }
+                    }
+
+                    function drawQuadrentLines() {
+                        context.beginPath();
+                        context.strokeStyle = '#230000';
+                        context.moveTo(0, 250);
+                        context.lineTo(500, 250);
+                        context.moveTo(250, 500);
+                        context.lineTo(250, 250);
+                        context.stroke();
+                        context.strokeStyle = '#FF0000';
+                        context.moveTo(250, 250);
+                        context.lineTo(250, 0);
+                        context.stroke();
+                    }
+
+                    function  drawScreen() {
+                        context.fillStyle = '#EEEEEE';
+                        context.fillRect(0, 0, theCanvas.width, theCanvas.height);
+                        //Box
+                        context.strokeStyle = '#000000';
+                        context.strokeRect(1, 1, theCanvas.width - 2, theCanvas.height - 2);
+
+                        ball.x = circle.centerX + Math.cos(circle.angle) * circle.radius;
+                        ball.y = circle.centerY + Math.sin(circle.angle) * circle.radius;
+
+                        ball.x = Math.round(ball.x);
+                        ball.y = Math.round(ball.y);
+
+                        circle.angle += ball.speed;
+
+
+                        context.fillStyle = "#000000";
+                        context.beginPath();
+                        context.arc(ball.x, ball.y, 15, 0, Math.PI * 2, true);
+                        context.closePath();
+                        context.fill();
+                        drawQuadrentLines();
+                        console.log("x= " + ball.x + " y=" + ball.y);
+                        if (ball.y < 250)
+                        {
+                            var volume = ball.x/500;
+                            console.log(volume);
+                            play(volume/10);
+                        }
+
+                    }
+
+                    function play(volume) {
+                        x.volume = volume;
+                        x.play();
+                    }
+                </script>
+            </div>
+            </div>
+        </div>
+    </body>
 </html>
