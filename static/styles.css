@@ -6,7 +6,7 @@
 body { font: 16px Helvetica, Sans-Serif; line-height: 24px; background: url(images/noise.jpg); }
 .clear { clear: both; }
 #page-wrap { width: 800px; margin: 40px auto 60px; background: #DCDCDC; padding: 30px; border: 2px solid;}
-#pic { float: right; margin: -30px 0 0 0; size:100%; display: inline;}
+#pic { float: right; margin: -30px 0 0 0; display: inline;}
 h1 { margin: 0 0 16px 0; padding: 0 0 16px 0; font-size: 42px; font-weight: bold; letter-spacing: -2px; border-bottom: 1px solid #999; }
 h2 { font-size: 16px; margin: 0 0 6px 0; position: relative; padding: 10px; }
 .detailingList{ text-align: left; margin-left: 20px; list-style-type:none;}
@@ -22,7 +22,17 @@ dt {  font-weight: bold; font-size: 20px; text-align: left; width: 0px;  }
 .card { padding: 20px; width: 100%;}
 dd { width: 600px; float: left; }
 dd.clear { float: none; margin: 0; height: 15px; }
-	
+#gameControls {
+    float:right;
+    border:1px black;
+    background: #777;
+}
+
+#medium-btn {
+    width: 150px;
+    height: 30px;
+}
+
 .navbar-fixed-left {
   width: 140px;
   position: fixed;
@@ -59,5 +69,9 @@ background: grey;
   }
 
 .navbar navbar-inverse navbar-fixed-left {
+
+}
+
+#soundFiles {
 
 }
