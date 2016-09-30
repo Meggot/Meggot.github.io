@@ -29,7 +29,7 @@
                     <div id="gameControls">
                         <form id="newPlanetForm">
                             <tag> Periapsis: <output for="periapsis" id="periapsisTell">125</output></tag>
-                            <tag><input id="periapsis" type="range" min="-250" value = "125" max="250"step="1" oninput="outputUpdate(value)"></input><br></br></tag>
+                            <tag><input id="periapsis" type="range" min="-250" value = "0" max="250"step="1" oninput="outputUpdate(value)"></input><br></br></tag>
                             <tag> Speed: <input id="speed" type="number" label="Enter the speed of orbit" value="0.5" step="0.1"> </input><br></br></tag>
                         </form>
                         <button id="medium-btn" onclick="clearAllPlanets()">Clear Space</button><br></br>
@@ -52,7 +52,7 @@
                         var planetWrapper = [];
                         var lastPlanetId = 0;
                         var orbitActive = false;
-                        var radius = 250;
+                        var radius = 500;
                         theCanvas = document.getElementById("canvasOne");
                         context = theCanvas.getContext("2d");
 
@@ -79,6 +79,7 @@
                         function stopOrbiter() {
                             if (orbitActive)
                             {
+                                audioContext.suspend();
                                 orbitActive = false;
                                 window.clearInterval(window.myInterval);
                             }
@@ -121,6 +122,8 @@
                                         planetPointer.angle += planetPointer.speed;
                                         planetPointer.soundSource.positionX = planetPointer.xCoord;
                                         planetPointer.soundSource.positionY = planetPointer.yCoord;
+                                        var normalizedValue = planetPointer.yCoord / 500 + planetPointer.xCoord / 500;
+                                        planetPointer.oscilator.frequency.value =  normalizedValue * 1000;
                                         //console.log(planetPointer.id + "= X: " + planetPointer.soundSource.positionX + "Y: " + planetPointer.soundSource.positionY)
                                     }
                                 }
@@ -147,6 +150,7 @@
                             //panner.coneOuterGain = 0;
                             panner.setPosition(Math.round(newPeriapsis), 250, 300);
                             oscillator.connect(panner);
+                            oscillator.type = 'triangle';
                             panner.connect(audioContext.destination);
                             oscillator.start();
                             console.log(newPeriapsis + "-" + speed + "-" + panner);
