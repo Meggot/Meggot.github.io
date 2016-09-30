@@ -23,6 +23,8 @@
             </h1>
             <div id = "soundOrbiter">
                 <h2> Sound Orbiter </h2>
+                <p>Create your own solar systems, and it'll play its fingerprint back to you!
+                </p>
                 <audio id="planetBeep">
                     <source src="../static/planetBeep.wav" type="audio/wav">
                         Your browser does not support the audio functionality :(
@@ -38,20 +40,33 @@
                         Your browser does not support the audio functionality :(
                     </source>
                 </audio>
+                <audio id="DroneDemo">
+                    <source src="../static/DroneDemo.mp3" type= "audio/mp3">
+                        Your browser does not support the audio functionality :(
+                    </source>
+                </audio>
+                <audio id="DroneDemo2">
+                    <source src="../static/DroneDemo2.mp3" type= "audio/mp3">
+                        Your browser does not support the audio functionality :(
+                    </source>
+                </audio>
                 <div style="border: 1px solid" class="gameArea">
                     <div id="gameControls">
                         <form id="newPlanetForm">
-                            <tag> Periapsis: <input id="periapsis" type="number" label="Enter the periapsis"> </input><br></br></tag>
-                            <tag> Speed: <input id="speed" type="number" label="Enter the speed of orbit"> </input><br></br></tag>
+                            <tag> Periapsis: <output for="periapsis" id="periapsisTell">125</output></tag>
+                            <tag><input id="periapsis" type="range" min="0" value = "125" max="250"step="1" oninput="outputUpdate(value)"></input><br></br></tag>
+                            <tag> Speed: <input id="speed" type="number" label="Enter the speed of orbit" value="0.5" step="0.1"> </input><br></br></tag>
                             <tag> Sound File: <select id="soundFiles">
                                     <option value="ShortBleep1" selected="selected" > ShortBleep1</option>
                                     <option value="ShortBleep2" >ShortBleep2</option>
+                                    <option value="DroneDemo" >DroneDemo</option>
+                                    <option value="DroneDemo2" >DroneDemo2</option>
                                 </select><br></br></tag>
                         </form>
                         <button id="medium-btn" onclick="clearAllPlanets()">Clear Space</button><br></br>
                         <button id="medium-btn" onclick="addPlanetButton()">Add Planet to Space</button><br></br>
-                        <button id="medium-btn" onclick="startOrbiter()"> Begin the orbit</button><br></br>
-                        <button id="medium-btn" onclick="stopOrbiter()"> Stop the orbit</button><br></br>
+                        <button id="medium-btn" onclick="startOrbiter()"> Begin</button><br></br>
+                        <button id="medium-btn" onclick="stopOrbiter()">Pause</button><br></br>
                     </div>
                     <canvas id="canvasOne" float="left" width="500" height="500"></canvas>
                     <script>
@@ -122,17 +137,17 @@
                                     context.arc(planetPointer.xCoord, planetPointer.yCoord, 5, 0, Math.PI * 2, true);
                                     context.closePath();
                                     context.fill();
-                                    if (orbitActive)    
+                                    if (orbitActive)
                                     {
                                         planetPointer.angle += planetPointer.speed;
 
                                         if (planetPointer.yCoord < 250)
                                         {
-                                            planetPointer.muted = false;
+                                            //planetPointer.muted = false;
                                             var volume = planetPointer.xCoord / 500;// divide by width, to get x 100 %
                                             play(planetPointer.audioId, volume); //decimal constant
-                                        } else if (!planetPointer.muted) {
-                                            planetPointer.muted = true;
+                                        } else {
+                                            //planetPointer.muted = true;
                                         }
                                     }
                                 }
@@ -154,11 +169,15 @@
                             addPlanet(newPeriapsis, soundFile, speed / 100);
                             drawScreen();
                         }
-                        
+
                         function clearAllPlanets() {
                             orbitActive = false;
                             planetWrapper = [];
                             drawScreen();
+                        }
+
+                        function outputUpdate(vol) {
+                            document.querySelector('#periapsisTell').value = vol;
                         }
 
                     </script>

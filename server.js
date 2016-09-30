@@ -2,6 +2,7 @@ var express = require("express");
 var app = express();
 var bodyParser = require('body-parser');
 var router = express.Router();
+var pather = require('path');
 var path = __dirname + '/views/';
 
 //Get BODYPARSER for POST requests.
@@ -21,6 +22,8 @@ router.get("/index",function(req,res){
   res.sendFile(path + "index.html");
 });
 
+
+
 router.get("/portfolio",function(req,res){
   res.sendFile(path + "portfolio.html");
 });
@@ -29,9 +32,7 @@ router.get("/blog",function(req,res){
   res.sendFile(path + "blog.html");
 });
 
-router.get("/static/styles.css",function(req,res) {
-    res.sendFile(__dirname + "/static/styles.css");
-});
+app.use("/static", express.static(__dirname + '/static'));
 
 router.get("/images/cthulu.png", function(req,res) {
     res.sendFile(path+ "/images/cthulu.png");
