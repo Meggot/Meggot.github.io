@@ -25,52 +25,30 @@
                 <h2> Sound Orbiter </h2>
                 <p>Create your own solar systems, and it'll play its fingerprint back to you!
                 </p>
-                <audio id="planetBeep">
-                    <source src="../static/planetBeep.wav" type="audio/wav">
-                        Your browser does not support the audio functionality :(
-                    </source>
-                </audio>
-                <audio id="ShortBleep1">
-                    <source src="../static/ShortBleep1.mp3" type= "audio/mp3">
-                        Your browser does not support the audio functionality :(
-                    </source>
-                </audio>
-                <audio id="ShortBleep2">
-                    <source src="../static/ShortBleep2.mp3" type= "audio/mp3">
-                        Your browser does not support the audio functionality :(
-                    </source>
-                </audio>
-                <audio id="DroneDemo">
-                    <source src="../static/DroneDemo.mp3" type= "audio/mp3">
-                        Your browser does not support the audio functionality :(
-                    </source>
-                </audio>
-                <audio id="DroneDemo2">
-                    <source src="../static/DroneDemo2.mp3" type= "audio/mp3">
-                        Your browser does not support the audio functionality :(
-                    </source>
-                </audio>
                 <div style="border: 1px solid" class="gameArea">
                     <div id="gameControls">
                         <form id="newPlanetForm">
                             <tag> Periapsis: <output for="periapsis" id="periapsisTell">125</output></tag>
-                            <tag><input id="periapsis" type="range" min="0" value = "125" max="250"step="1" oninput="outputUpdate(value)"></input><br></br></tag>
+                            <tag><input id="periapsis" type="range" min="-250" value = "125" max="250"step="1" oninput="outputUpdate(value)"></input><br></br></tag>
                             <tag> Speed: <input id="speed" type="number" label="Enter the speed of orbit" value="0.5" step="0.1"> </input><br></br></tag>
-                            <tag> Sound File: <select id="soundFiles">
-                                    <option value="ShortBleep1" selected="selected" > ShortBleep1</option>
-                                    <option value="ShortBleep2" >ShortBleep2</option>
-                                    <option value="DroneDemo" >DroneDemo</option>
-                                    <option value="DroneDemo2" >DroneDemo2</option>
-                                </select><br></br></tag>
                         </form>
                         <button id="medium-btn" onclick="clearAllPlanets()">Clear Space</button><br></br>
                         <button id="medium-btn" onclick="addPlanetButton()">Add Planet to Space</button><br></br>
                         <button id="medium-btn" onclick="startOrbiter()"> Begin</button><br></br>
                         <button id="medium-btn" onclick="stopOrbiter()">Pause</button><br></br>
                     </div>
+                    <p class='listener-data'>Listen Data: </p>
+                    <p class='panner-data'>Panner Data: </p>
                     <canvas id="canvasOne" float="left" width="500" height="500"></canvas>
                     <script>
-
+                        var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        var listenerData = document.querySelector('.listener-data');
+                        var pannerData = document.querySelector('.panner-data');
+                        var listener = audioContext.listener;
+                        //listener.setOrientation(0, 0, 1, 0, -1, 0);
+                        audioContext.listener.setPosition(250, 250, 300);
+                        listenerData.innerHTML = 'Listener data: X ' + 250 + ' Y ' + 250 + ' Z ' + 300;
+                       
                         var planetWrapper = [];
                         var lastPlanetId = 0;
                         var orbitActive = false;
@@ -78,11 +56,11 @@
                         theCanvas = document.getElementById("canvasOne");
                         context = theCanvas.getContext("2d");
 
-                        function addPlanet(periapsis, noteFile, velocity)
+                        function addPlanet(periapsis, panner,  oscillator, velocity)
                         {
-                            if (periapsis <= radius && noteFile != null)
+                            if (periapsis <= radius && oscillator != null)
                             {
-                                var newPlanet = {id: lastPlanetId++, xCoord: periapsis, yCoord: 250, speed: velocity, audioId: noteFile, centerX: 250, centerY: 250, radius: periapsis, angle: 0};
+                                var newPlanet = {oscilator: oscillator, playing: false, id: lastPlanetId++, xCoord: periapsis, yCoord: 250, speed: velocity, soundSource: panner, centerX: 250, centerY: 250, radius: periapsis, angle: 0};
                                 console.log("New planet added: " + newPlanet.id + " playing track: " + newPlanet.audioId + "with a periapsis of " + newPlanet.xCoord);
                                 planetWrapper[lastPlanetId] = newPlanet;
                             }
@@ -92,6 +70,7 @@
                         function startOrbiter() {
                             if (!orbitActive)
                             {
+                                audioContext.resume();    
                                 orbitActive = true;
                                 window.myInterval = setInterval(drawScreen, 1);
                             }
@@ -140,39 +119,45 @@
                                     if (orbitActive)
                                     {
                                         planetPointer.angle += planetPointer.speed;
-
-                                        if (planetPointer.yCoord < 250)
-                                        {
-                                            //planetPointer.muted = false;
-                                            var volume = planetPointer.xCoord / 500;// divide by width, to get x 100 %
-                                            play(planetPointer.audioId, volume); //decimal constant
-                                        } else {
-                                            //planetPointer.muted = true;
-                                        }
+                                        planetPointer.soundSource.positionX = planetPointer.xCoord;
+                                        planetPointer.soundSource.positionY = planetPointer.yCoord;
+                                        //console.log(planetPointer.id + "= X: " + planetPointer.soundSource.positionX + "Y: " + planetPointer.soundSource.positionY)
                                     }
                                 }
                             }
                         }
 
-                        function play(audioId, volume) {
-                            var activeAudio = document.getElementById(audioId);
-                            activeAudio.volume = volume;
-                            activeAudio.play();
-                        }
-
                         function addPlanetButton() {
+
                             var newPeriapsis = document.getElementById("periapsis").value;
                             var speed = document.getElementById("speed").value;
-                            var soundFilesDropdown = document.getElementById("soundFiles");
-                            var soundFile = soundFilesDropdown.options[soundFilesDropdown.selectedIndex].value;
-                            console.log(newPeriapsis + "-" + speed + "-" + soundFile);
-                            addPlanet(newPeriapsis, soundFile, speed / 100);
+                            
+                            var oscillator = audioContext.createOscillator();
+                            oscillator.frequency.value = newPeriapsis * 25
+                            
+                            var panner = audioContext.createPanner();
+                          
+                            panner.panningModel = 'HRTF';
+                            //panner.distanceModel = 'inverse';
+                            panner.refDistance = 1;
+                            panner.maxDistance = 500;
+                            //panner.rolloffFactor = 2;
+                            panner.coneInnerAngle = 360;
+                            //panner.coneOuterAngle = 180;
+                            //panner.coneOuterGain = 0;
+                            panner.setPosition(Math.round(newPeriapsis), 250, 300);
+                            oscillator.connect(panner);
+                            panner.connect(audioContext.destination);
+                            oscillator.start();
+                            console.log(newPeriapsis + "-" + speed + "-" + panner);
+                            addPlanet(newPeriapsis, panner, oscillator, speed / 100);
                             drawScreen();
                         }
 
                         function clearAllPlanets() {
                             orbitActive = false;
                             planetWrapper = [];
+                            audioContext.suspend();
                             drawScreen();
                         }
 
