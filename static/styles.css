@@ -12,7 +12,7 @@ h2 { font-size: 16px; margin: 0 0 6px 0; position: relative; padding: 10px; }
 .detailingList{ text-align: left; margin-left: 20px; list-style-type:none;}
 h2 span { text-align: right; float: right; position: relative; bottom: 0; right: 0; font-style: normal; font-size: 16px; font-weight: bold;}
 h1.navbarTitle { border-bottom: 0px; font-size: 35px;}
-p { margin: 0 0 16px 0; }
+p { font: 14px; margin: 0 0 16px 0; }
 a { color: #00008B; text-decoration: none;}
 a:hover { color: black; }
 ul { margin: 0 0 32px 17px; }
