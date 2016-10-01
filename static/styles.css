@@ -25,11 +25,13 @@ dd.clear { float: none; margin: 0; height: 15px; }
 #gameControls {
     float:right;
     border:1px black;
-    background: #777;
+    background: #555;
+    padding: 5px;
+    color: white;
 }
 
 #medium-btn {
-    width: 150px;
+    width: 100%;
     height: 30px;
 }
 
