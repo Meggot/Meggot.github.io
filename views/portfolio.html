@@ -24,267 +24,317 @@
             <div id = "soundOrbiter">
                 <h2> The Solar System of Rhythm V1.0.1 </h2>
                 <p>Source Code: <a href='https://github.com/Meggot/Meggot.github.io/blob/master/views/portfolio.html'> Link </a>
-                <p>Create your own solar systems, and it'll play its fingerprint back to you! 
-                    It is best used with headphones, as it uses stereo sound around the middle coordinate.
-                    Beware of tidal lock when creating moons, alter the speed to remedy this!
-                </p>
-                <div style="border: 1px solid" class="gameArea">
-                    <div id="gameControls">
-                        <div id="audioControls">
-                            <button id="small-btn" onclick="muteAll()">Mute</button><p id="mute">Muted</p>
-                            <!--<tag> Volume <output for="volume" id="volumeTell">50</output></tag>-->
-                            <!--<tag><input id="volume" type="range" min="0" value = "50" max="100"step="1" oninput="outputVolumeUpdate(value)"></input><br></br></tag>-->
-                        </div>
-                        <form id="newPlanetForm">
-                            <tag> Periapsis: <output for="periapsis" id="periapsisTell">0</output></tag>
-                            <tag><input id="periapsis" type="range" min="-240" value = "0" max="240"step="1" oninput="outputPeriapsisUpdate(value)"></input><br></br></tag>
-                            <!--<tag> Frequency <output for="frequency" id="frequencyTell">300</output></tag>
-                            <tag><input id="frequency" type="range" min="40" value = "300" max="3000"step="5" oninput="outputFrequencyUpdate(value)"></input><br></br></tag>-->
-                            <tag> Speed Of Orbit: <input id="speed" type="number" label="Enter the speed of orbit" value="0.5" step="0.1"> </input><br></br></tag>
-                        </form>
-                        <input onclick="ungreyParentDropdown()" type="checkbox" id="parentCheckbox" value="hasParent" selected="false">Moon Mode?<br>
-                                <select id="orbitParent">
-                                    <tag> Planet ID: 
-                                    </tag>
-                                </select>
-                                <br></br>
-                                <button id="medium-btn" onclick="addPlanetButton()">Add Item to Space</button><br></br>
-                                <button id="medium-btn" onclick="clearAllPlanets()">Clear Space</button><br></br>
-                                <button id="medium-btn" onclick="startOrbiter()"> Begin</button><br></br>
-                                <button id="medium-btn" onclick="stopOrbiter()">Pause</button><br></br>
-                                </div>
-                                <canvas id="canvasOne" float="left" width="500" height="500"></canvas>
-                                <script>
-                                    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                                    var listener = audioContext.listener;
-                                    var gainNode = audioContext.createGain();
-                                    gainNode.gain.value = 0
-                                    listener.setOrientation(0, 250, 0, 0, 1, 0);
-                                    listener.setPosition(250, 250, 0);
-                                    var planetWrapper = [];
-                                    var orbitPairs = [];
-                                    var lastPlanetId = 0;
-                                    var lastOrbitId = 0;
-                                    var orbitActive = false;
-                                    theCanvas = document.getElementById("canvasOne");
-                                    context = theCanvas.getContext("2d");
-                                    var mute = document.getElementById("mute");
-                                    var checkBox = document.getElementById("parentCheckbox");
-                                    checkBox.checked = false;
-
-                                    function muteAll() {
-                                        if (mute.id == "mute") {
-                                            gainNode.gain.value = 1;
-                                            mute.id = "activated";
-                                            mute.innerHTML = "Unmuted";
-                                        } else {
-                                            gainNode.gain.value = 0;
-                                            mute.id = "mute";
-                                            mute.innerHTML = "Muted";
-                                        }
-                                    }
-
-                                    function ungreyParentDropdown()
-                                    {
+                    <p>Create your own solar systems, and it'll play its fingerprint back to you! 
+                        It is best used with headphones, as it uses stereo sound around the middle coordinate.
+                    </p>
+                    <div style="border: 1px solid" class="gameArea">
+                        <div id="gameControls">
+                            <div id="audioControls">
+                                <button id="small-btn" onclick="muteAll()"><p id="mute">Muted</p></button>
+                                <input type="checkbox" onclick="activeTrailCheckbox()" id="small-btn">Disable Trail</input>
+                                <input type="checkbox" onclick="activeGridLinesCheckbox()" id="small-btn">Disable Grid Lines</input>
+                                <!--<tag> Volume <output for="volume" id="volumeTell">50</output></tag>-->
+                                <!--<tag><input id="volume" type="range" min="0" value = "50" max="100"step="1" oninput="outputVolumeUpdate(value)"></input><br></br></tag>-->
+                            </div>
+                            <form id="newPlanetForm">
+                                <tag> Periapsis: <output for="periapsis" id="periapsisTell">0</output></tag>
+                                <tag><input id="periapsis" type="range" min="-240" value = "0" max="240"step="1" oninput="outputPeriapsisUpdate(value)"></input><br></br></tag>
+                                <!--<tag> Frequency <output for="frequency" id="frequencyTell">300</output></tag>
+                                <tag><input id="frequency" type="range" min="40" value = "300" max="3000"step="5" oninput="outputFrequencyUpdate(value)"></input><br></br></tag>-->
+                                <!--<tag> Speed Of Orbit: <input id="speed" type="number" label="Enter the speed of orbit" value="0.5" step="0.1"> </input><br></br></tag>-->
+                                <tag> Orbit Speed: <output for="speed" id="speedTell">0.2</output></tag>
+                                <tag><input id="speed" type="range" min="0" value = "0.2" max="30"step="0.1" oninput="outputSpeedUpdate(value)"></input><br></br></tag>
+                            </form>
+                            <input onclick="ungreyParentDropdown()" type="checkbox" id="parentCheckbox" value="hasParent" selected="false">Moon Mode?<br>
+                                    <select id="orbitParent">
+                                        <tag> Planet ID: 
+                                        </tag>
+                                    </select>
+                                    <br></br>
+                                    <button id="medium-btn" onclick="addPlanetButton()">Add Item to Space</button><br></br>
+                                    <button id="medium-btn" onclick="clearAllPlanets()">Clear Space</button><br></br>
+                                    <button id="medium-btn" onclick="startOrbiter()"> Begin</button><br></br>
+                                    <button id="medium-btn" onclick="stopOrbiter()">Pause</button><br></br>
+                                    </div>
+                                    <canvas id="canvasOne" float="left" width="1000" height="1000"></canvas>
+                                    <script>
+                                        var width = 1000;
+                                        var height = 1000;
+                                        
+                                        var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                                        var listener = audioContext.listener;
+                                        var gainNode = audioContext.createGain();
+                                        gainNode.gain.value = 0
+                                        listener.setOrientation(0, width/2, 0, 0, 1, 0);
+                                        listener.setPosition(width/2, height/2, 0);
+                                        var planetWrapper = [];
+                                        var orbitPairs = [];
+                                        var planetPoints = [];
+                                        var lastPlanetId = 0;
+                                        var lastOrbitId = 0;
+                                        var orbitActive = false;
+                                        var trailActive = true;
+                                        var gridLines = true;
+                                        theCanvas = document.getElementById("canvasOne");
+                                        context = theCanvas.getContext("2d");
+                                        var mute = document.getElementById("mute");
                                         var checkBox = document.getElementById("parentCheckbox");
-                                        var planetDropdown = document.getElementById("orbitParent");
-                                        if (checkBox.checked)
-                                        {
-                                            planetDropdown.disabled = false;
-                                        } else
-                                        {
-                                            planetDropdown.disabled = true;
-                                        }
+                                        checkBox.checked = false;
 
-                                    }
-
-                                    function addPlanet(id, periapsis, panner, oscillator, velocity, isOrbitingPlanet)
-                                    {
-                                        var radius = periapsis;
-                                        if (periapsis <= radius && oscillator != null)
-                                        {
-                                            var newPlanet = {oscilator: oscillator, playing: false, id: id, xCoord: periapsis, yCoord: 250, speed: velocity, soundSource: panner, isOrbitingPlanet: isOrbitingPlanet, radius: radius, angle: 0};
-                                            planetWrapper[lastPlanetId] = newPlanet;
-                                        }
-
-                                    }
-
-                                    function addOrbitPairing(orbitPlanetId, orbiterPlanetId)
-                                    {
-                                        var orbitID = lastOrbitId++;
-                                        var newOrbit = {orbitId: orbitID, orbitPlanetId: orbitPlanetId, orbiterPlanetId: orbiterPlanetId};
-                                        orbitPairs[orbitID] = newOrbit;
-                                        console.log("Added orbitPairs!: " + orbitID + " linking: " + orbitPlanetId + " with " + orbiterPlanetId);
-                                    }
-
-                                    function startOrbiter() {
-                                        if (!orbitActive)
-                                        {
-                                            for (var i = 0; i > planetWrapper.length; i++)
-                                            {
-                                                planetWrapper[i].oscilator.mute = true;
+                                        function muteAll() {
+                                            if (mute.id == "mute") {
+                                                gainNode.gain.value = 1;
+                                                mute.id = "activated";
+                                                mute.innerHTML = "Unmuted";
+                                            } else {
+                                                gainNode.gain.value = 0;
+                                                mute.id = "mute";
+                                                mute.innerHTML = "Muted";
                                             }
-                                            audioContext.resume();
-                                            orbitActive = true;
-                                            window.myInterval = setInterval(drawScreen, 1);
                                         }
-                                    }
-
-                                    function stopOrbiter() {
-                                        if (orbitActive)
-                                        {
-                                            audioContext.suspend();
-                                            orbitActive = false;
-                                            window.clearInterval(window.myInterval);
+                                        
+                                        function activeTrailCheckbox() {
+                                            trailActive = !trailActive;
+                                            drawScreen();
                                         }
-                                    }
-
-                                    function drawQuadrentLines() {
-                                        context.beginPath();
-                                        context.strokeStyle = '#FF0000';
-                                        context.moveTo(0, 250);
-                                        context.lineTo(500, 250);
-                                        context.moveTo(250, 500);
-                                        context.lineTo(250, 250);
-                                        context.moveTo(250, 250);
-                                        context.lineTo(250, 0);
-                                        context.stroke();
-                                    }
-
-                                    function  drawScreen() {
-                                        context.fillStyle = '#EEEEEE';
-                                        context.fillRect(0, 0, theCanvas.width, theCanvas.height);
-                                        context.strokeStyle = '#000000';
-                                        context.strokeRect(1, 1, theCanvas.width - 2, theCanvas.height - 2);
-                                        drawQuadrentLines();
-                                        for (var i = 0; i < planetWrapper.length; i++)
+                                        
+                                        function activeGridLinesCheckbox()
                                         {
-                                            console.log(planetWrapper);
-                                            var planetPointer = planetWrapper[i];
-                                            var orbitCenterX = 250;
-                                            var orbitCenterY = 250;
-                                            if (planetPointer.isOrbitingPlanet)
+                                            gridLines = !gridLines;
+                                            drawScreen();
+                                        }
+
+                                        function ungreyParentDropdown()
+                                        {
+                                            var checkBox = document.getElementById("parentCheckbox");
+                                            var planetDropdown = document.getElementById("orbitParent");
+                                            if (checkBox.checked && planetDropdown.length >= 1)
                                             {
-                                                for (var x = 0; x < orbitPairs.length; x++)
+                                                planetDropdown.disabled = false;
+                                            } else
+                                            {
+                                                planetDropdown.disabled = true;
+                                            }
+
+                                        }
+
+                                        function addPlanet(id, periapsis, panner, oscillator, velocity, isOrbitingPlanet)
+                                        {
+                                            var radius = periapsis;
+                                            if (periapsis <= radius && oscillator != null)
+                                            {
+                                                pastpoints = [];
+                                                var newPlanet = {oscilator: oscillator, playing: false, id: id, pastPoints: pastpoints, xCoord: width/2, yCoord: height/2, speed: velocity, soundSource: panner, isOrbitingPlanet: isOrbitingPlanet, radius: radius, angle: 0};
+                                                planetWrapper[lastPlanetId] = newPlanet;
+                                            }
+
+                                        }
+
+                                        function addOrbitPairing(orbitPlanetId, orbiterPlanetId)
+                                        {
+                                            var orbitID = lastOrbitId++;
+                                            var newOrbit = {orbitId: orbitID, orbitPlanetId: orbitPlanetId, orbiterPlanetId: orbiterPlanetId};
+                                            orbitPairs[orbitID] = newOrbit;
+                                            console.log("Added orbitPairs!: " + orbitID + " linking: " + orbitPlanetId + " with " + orbiterPlanetId);
+                                        }
+
+                                        function startOrbiter() {
+                                            if (!orbitActive)
+                                            {
+                                                for (var i = 0; i > planetWrapper.length; i++)
                                                 {
-                                                    if (orbitPairs[x].orbiterPlanetId === planetPointer.id)
-                                                    {
-                                                        orbitCenterX = planetWrapper[orbitPairs[x].orbitPlanetId].xCoord;
-                                                        orbitCenterY = planetWrapper[orbitPairs[x].orbitPlanetId].yCoord;
-                                                    }
+                                                    planetWrapper[i].oscilator.mute = true;
                                                 }
+                                                audioContext.resume();
+                                                orbitActive = true;
+                                                window.myInterval = setInterval(drawScreen, 1);
                                             }
-                                            console.log(i + ": Updated: x:" + orbitCenterX + " y:" + orbitCenterY);
-                                            planetPointer.xCoord = orbitCenterX + Math.cos(planetPointer.angle) * planetPointer.radius;
-                                            planetPointer.yCoord = orbitCenterY + Math.sin(planetPointer.angle) * planetPointer.radius;
-                                            var normalizedValue = planetPointer.xCoord / 250;
-                                            planetPointer.oscilator.frequency.value = normalizedValue*1000;
-                                            console.log(normalizedValue);
-                                            planetPointer.soundSource.pan.value = (normalizedValue - 1);
-                                            context.fillStyle = "#000000";
-                                            context.beginPath();
-                                            context.arc(planetPointer.xCoord, planetPointer.yCoord, 5, 0, Math.PI * 2, true);
-                                            context.closePath();
-                                            context.fill();
+                                        }
+
+                                        function stopOrbiter() {
                                             if (orbitActive)
                                             {
-                                                planetPointer.angle += planetPointer.speed;
+                                                audioContext.suspend();
+                                                orbitActive = false;
+                                                window.clearInterval(window.myInterval);
                                             }
                                         }
 
-                                    }
-
-                                    function addPlanetButton() {
-
-                                        var newPeriapsis = document.getElementById("periapsis").value;
-                                        var speed = document.getElementById("speed").value;
-                                        var frequency = 0;
-                                        var oscillator = audioContext.createOscillator();
-                                        oscillator.frequency.value = frequency;
-                                        var stereoPanner = audioContext.createStereoPanner();
-
-                                        //var panner = audioContext.createPanner();
-                                        //panner.panningModel = 'HRTF';
-                                        //panner.distanceModel = 'inverse';
-                                        //panner.refDistance = 1;
-                                        //panner.maxDistance = 500;
-                                        //panner.rolloffFactor = 2;
-                                        //panner.coneInnerAngle = 360;
-                                        ////panner.coneOuterAngle = 180;
-                                        ////panner.coneOuterGain = 0;
-                                        //panner.setPosition(Math.round(newPeriapsis), 250, 300);
-
-                                        oscillator.type = 'sawtooth';
-                                        oscillator.connect(stereoPanner);
-                                        stereoPanner.connect(gainNode);
-                                        gainNode.connect(audioContext.destination);
-
-                                        var checkBox = document.getElementById("parentCheckbox");
-                                        var planetDropdown = document.getElementById("orbitParent");
-                                        var isOrbiting = false;
-                                        var id = lastPlanetId;
-
-                                        var consoleLogOutput = "Added a new planet: " + id + ", that has a periapsis of: " + newPeriapsis + ", a velocity of " + speed / 100;
-
-                                        if (checkBox.checked)
-                                        {
-                                            console.log(planetDropdown.selectedIndex);
-                                            console.log(planetWrapper)
-                                            var orbitingParentId = planetWrapper[planetDropdown.selectedIndex].id;
-                                            console.log("Adding orbit Pair!");
-                                            addOrbitPairing(orbitingParentId, id);
-                                            consoleLogOutput = consoleLogOutput + ". This planet is orbiting planet " + orbitingParentId;
-                                            isOrbiting = true;
+                                        function drawGridLines() {
+                                            context.beginPath();
+                                            context.moveTo(width/2, 0);
+                                            context.lineTo(width/2, height/2);
+                                            context.moveTo(0, height/2);
+                                            context.lineTo(width, height/2);
+                                            context.moveTo(width/2, height/2);
+                                            context.lineTo(width/2, height);
+                                            context.stroke();
                                         }
-                                        console.log(consoleLogOutput);
-                                        var orbitParentDropdown = document.getElementById("orbitParent");
-                                        var opt = document.createElement('option');
-                                        opt.value = id;
-                                        opt.innerHTML = "Planet: " + id;
-                                        orbitParentDropdown.appendChild(opt);
-                                        addPlanet(id, newPeriapsis, stereoPanner, oscillator, speed / 100, isOrbiting);
-                                        drawScreen();
-                                        oscillator.start();
-                                        lastPlanetId++;
-                                    }
 
-                                    function clearAllPlanets() {
-                                        planetWrapper = [];
-                                        audioContext.close();
-                                        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                                        listener = audioContext.listener;
-                                        gainNode = audioContext.createGain();
-                                        if (mute.id.value = "activated")
-                                        {
-                                            gainNode.gain.value = 1;
-                                        } else {
-                                            gainNode.gain.value = 0;
+                                        function  drawScreen() {
+                                            context.fillStyle = '#EEEEEE';
+                                            context.fillRect(0, 0, theCanvas.width, theCanvas.height);
+                                            context.strokeStyle = '#000000';
+                                            context.strokeRect(1, 1, theCanvas.width - 2, theCanvas.height - 2);
+                                            if (gridLines)
+                                            {
+                                                drawGridLines();
+                                            }
+                                            context.strokeStyle = '#FF0000';
+                                            for (var i = 0; i < planetWrapper.length; i++)
+                                            {
+                                                var planetPointer = planetWrapper[i];
+                                                var orbitCenterX = width/2;
+                                                var orbitCenterY = height/2;
+                                                if (planetPointer.isOrbitingPlanet)
+                                                {
+                                                    for (var x = 0; x < orbitPairs.length; x++)
+                                                    {
+                                                        if (orbitPairs[x].orbiterPlanetId === planetPointer.id)
+                                                        {
+                                                            orbitCenterX = planetWrapper[orbitPairs[x].orbitPlanetId].xCoord;
+                                                            orbitCenterY = planetWrapper[orbitPairs[x].orbitPlanetId].yCoord;
+                                                        }
+                                                    }
+                                                }
+                                                if (trailActive)
+                                                {
+                                                    renderTrail(planetPointer.pastPoints);
+                                                }
+                                                planetPointer.xCoord = orbitCenterX + Math.cos(planetPointer.angle) * planetPointer.radius;
+                                                planetPointer.yCoord = orbitCenterY + Math.sin(planetPointer.angle) * planetPointer.radius;
+                                                planetPointer.pastPoints[planetPointer.pastPoints.length] = [planetPointer.xCoord, planetPointer.yCoord];
+                                                var normalizedValue = planetPointer.xCoord / width/2;
+                                                planetPointer.oscilator.frequency.value = normalizedValue * 1000;
+                                                planetPointer.soundSource.pan.value = (normalizedValue - 1);
+                                                context.fillStyle = "#000000";
+                                                context.beginPath();
+                                                context.arc(planetPointer.xCoord, planetPointer.yCoord, 5, 0, Math.PI * 2, true);
+                                                context.closePath();
+                                                context.fill();
+                                                if (orbitActive)
+                                                {
+                                                    planetPointer.angle += planetPointer.speed;
+                                                }
+                                            }
+
                                         }
-                                        drawScreen();
-                                        var planetSelectBox = document.getElementById("orbitParent");
-                                        for(i = planetSelectBox.options.length - 1; i >= 0; i--)
-                                        {
-                                            selectbox.remove(i);
+
+                                        function renderTrail(pts) {
+                                            context.fillStyle = "#FF0000";
+                                            if (pts.length > 1) {
+                                                context.beginPath();
+                                                context.moveTo(pts[0][0], pts[0][1]);
+                                                for (var i = 1, pt; pt = pts[i]; i++) {
+                                                    //c.arc(pt[0], pt[1], 5, 0, Math.PI, true);
+                                                    context.lineTo(pt[0], pt[1]);
+                                                    //context.arc(pt[0], pt[1], 5, 0, Math.PI * 2, true)
+                                                }
+                                                context.stroke();
+                                                context.closePath();
+                                                pts = [];
+                                            }
                                         }
-                                    }
 
-                                    function outputPeriapsisUpdate(vol) {
-                                        document.querySelector('#periapsisTell').value = vol;
-                                    }
 
-                                    function outputFrequencyUpdate(freq) {
-                                        document.querySelector('#frequencyTell').value = freq;
-                                    }
-                                </script>
-                                <br></br>
-                                <div class ='card'>
-                    Developed by Bradley PH Williams, Designed by Sam Lusted.
-                    <br>Find a bug? Report it at<a href='mailto:BradleyW@artifexnet.co.uk'> BradleyW@artifexnet.co.uk </a> <br>
-                    In the meantime, hit refresh. It solves 90% of known issues!
-                    </div>
-                                </div>
-                                </div>
-                                </div>
-                                </div>
-                                </body>
-                                </html>
+                                        function addPlanetButton() {
+
+                                            var newPeriapsis = document.getElementById("periapsis").value;
+                                            var speed = document.getElementById("speed").value;
+                                            var frequency = 0;
+                                            var oscillator = audioContext.createOscillator();
+                                            oscillator.frequency.value = frequency;
+                                            var stereoPanner = audioContext.createStereoPanner();
+
+                                            //var panner = audioContext.createPanner();
+                                            //panner.panningModel = 'HRTF';
+                                            //panner.distanceModel = 'inverse';
+                                            //panner.refDistance = 1;
+                                            //panner.maxDistance = 500;
+                                            //panner.rolloffFactor = 2;
+                                            //panner.coneInnerAngle = 360;
+                                            ////panner.coneOuterAngle = 180;
+                                            ////panner.coneOuterGain = 0;
+                                            //panner.setPosition(Math.round(newPeriapsis), 250, 300);
+
+                                            oscillator.type = 'sawtooth';
+                                            oscillator.connect(stereoPanner);
+                                            stereoPanner.connect(gainNode);
+                                            gainNode.connect(audioContext.destination);
+
+                                            var checkBox = document.getElementById("parentCheckbox");
+                                            var planetDropdown = document.getElementById("orbitParent");
+                                            var isOrbiting = false;
+                                            var id = lastPlanetId;
+
+                                            var consoleLogOutput = "Added a new planet: " + id + ", that has a periapsis of: " + newPeriapsis + ", a velocity of " + speed / 100;
+
+                                            if (checkBox.checked)
+                                            {
+                                                console.log(planetDropdown.selectedIndex);
+                                                console.log(planetWrapper)
+                                                var orbitingParentId = planetWrapper[planetDropdown.selectedIndex].id;
+                                                console.log("Adding orbit Pair!");
+                                                addOrbitPairing(orbitingParentId, id);
+                                                consoleLogOutput = consoleLogOutput + ". This planet is orbiting planet " + orbitingParentId;
+                                                isOrbiting = true;
+                                            }
+                                            console.log(consoleLogOutput);
+                                            var orbitParentDropdown = document.getElementById("orbitParent");
+                                            var opt = document.createElement('option');
+                                            opt.value = id;
+                                            opt.innerHTML = "Planet: " + id;
+                                            orbitParentDropdown.appendChild(opt);
+                                            addPlanet(id, newPeriapsis, stereoPanner, oscillator, speed / 100, isOrbiting);
+                                            drawScreen();
+                                            oscillator.start();
+                                            lastPlanetId++;
+                                        }
+
+                                        function clearAllPlanets() {
+                                            lastPlanetId = 0;
+                                            lastOrbitId = 0;
+                                            planetWrapper = [];
+                                            audioContext.close();
+                                            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                                            listener = audioContext.listener;
+                                            gainNode = audioContext.createGain();
+                                            mute.id == "mute";
+                                            muteAll();
+                                            var checkBox = document.getElementById("parentCheckbox");
+                                            var planetDropdown = document.getElementById("orbitParent");
+                                            checkBox.checked = false;
+                                            planetDropdown.disabled = true;
+                                            ungreyParentDropdown();
+                                            drawScreen();
+                                            var planetSelectBox = document.getElementById("orbitParent");
+                                            for (i = planetSelectBox.options.length - 1; i >= 0; i--)
+                                            {
+                                                planetSelectBox.remove(i);
+                                            }
+                                        }
+
+                                        function outputPeriapsisUpdate(vol) {
+                                            document.querySelector('#periapsisTell').value = vol;
+                                        }
+
+                                        function outputFrequencyUpdate(freq) {
+                                            document.querySelector('#frequencyTell').value = freq;
+                                        }
+                                        
+                                        function outputSpeedUpdate(speed) {
+                                            document.querySelector('#speedTell').value = speed;
+                                        }
+                                    </script>
+                                    <br></br>
+                                    <div class ='card'>
+                                        Developed by Bradley PH Williams, Designed by Sam Lusted.
+                                        <br>Find a bug? Report it at<a href='mailto:BradleyW@artifexnet.co.uk'> BradleyW@artifexnet.co.uk </a> <br>
+                                                In the meantime, hit refresh. It solves 90% of known issues!
+                                                </div>
+                                                </div>
+                                                </div>
+                                                </div>
+                                                </div>
+                                                </body>
+                                                </html>
