@@ -1,92 +1,106 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; utf-8;"/>
-        <link rel="stylesheet" href= "../static/styles.css" type="text/css"></link>
-        <title>Bradley PH Williams</title>
-        <script type="text/javascript" src="../scripts/solarSystemOfRhythm.js"></script>
-    </head>
-   
-    <body onload="drawScreen()">
-        <div class="navbar navbar-inverse navbar-fixed-left">
-            <h1 class="navbarTitle"> Bradley <span style="font-size:20px">PH</span> Williams </h1>
-            <navbar>
-                <ul class="nav navbar-nav">
-                    <li><a class="navbar-active" href="index">About</a></li>
-                    <li><a href="portfolio">Portfolio</a></li>
-                    <li><a href="blog">Blog</a></li>
-                </ul>
-            </navbar>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; utf-8;"/>
+    <link rel="stylesheet" href="../static/styles.css" type="text/css"></link>
+    <title>Bradley PH Williams</title>
+    <script type="text/javascript" src="../scripts/solarSystemOfRhythm.js"></script>
+</head>
+
+<body onload="drawScreen()">
+<div class="navbar navbar-inverse navbar-fixed-left">
+    <h1 class="navbarTitle"> Bradley <span style="font-size:20px">PH</span> Williams </h1>
+    <navbar>
+        <ul class="nav navbar-nav">
+            <li><a class="navbar-active" href="index">About</a></li>
+            <li><a href="portfolio">Portfolio</a></li>
+            <li><a href="blog">Blog</a></li>
+        </ul>
+    </navbar>
+</div>
+<div id="page-wrap">
+    <h1> Here's my portfolio..
+    </h1>
+    <div id="soundOrbiter">
+        <h2> The Solar System of Rhythm and Vision V1.0.1 </h2>
+        <p>Source Code: <a href='https://github.com/Meggot/Meggot.github.io/blob/master/views/portfolio.html'> Link </a>
+        </p>
+        <p>Create your own solar systems, and it'll play its fingerprint back to you in visual and audio manner!
+            It is best used with headphones, as it uses stereo sound around the middle coordinate.
+        </p>
+        <div style="border: 1px solid" class="gameArea">
+            <div id="gameControls">
+                <div id="audioControls">
+                    <button id="small-btn" onclick="muteAll()"><p id="mute">Muted</p></button>
+                    <input type="checkbox" onclick="activeTrailCheckbox()" id="small-btn" checked="checked">Disable
+                    Trail</input>
+                    <input type="checkbox" onclick="activeGridLinesCheckbox()" id="small-btn">Disable Grid Lines</input>
+                    <!--<tag> Volume <output for="volume" id="volumeTell">50</output></tag>-->
+                    <!--<tag><input id="volume" type="range" min="0" value = "50" max="100"step="1" oninput="outputVolumeUpdate(value)"></input><br></br></tag>-->
+                    <audio id="ShortBleepSRC" src="../static/ShortBleep1.mp3" type="audio/mp3"></audio>
+                </div>
+                <div id="audioFile">
+                    <form id="musicSource">
+                        <tag><input type="radio" name="musicRadioButton" value="oscillator"> Oscillator </input></tag>
+                        <tag><input type="radio" name="musicRadioButton" value="strike"> Strike </input></tag>
+                    </form>
+                    <tag> Wave Type:
+                    </tag>
+                    <select id="musicFileSource">
+                        <option id="ShortBleep1" value="../static/ShortBleep1.mp3">ShortBleep1</option>
+                    </select>
+                </div>
+                <form id="newPlanetForm">
+                    <tag> Periapsis:
+                        <output for="periapsis" id="periapsisTell">0</output>
+                    </tag>
+                    <tag><input id="periapsis" type="range" min="-240" value="0" max="240" step="1"
+                                oninput="outputPeriapsisUpdate(value)"></input><br></br></tag>
+                    <!--<tag> Frequency <output for="frequency" id="frequencyTell">300</output></tag>
+                    <tag><input id="frequency" type="range" min="40" value = "300" max="3000"step="5" oninput="outputFrequencyUpdate(value)"></input><br></br></tag>-->
+                    <!--<tag> Speed Of Orbit: <input id="speed" type="number" label="Enter the speed of orbit" value="0.5" step="0.1"> </input><br></br></tag>-->
+                    <tag> Orbit Speed:
+                        <output for="speed" id="speedTell">0.2</output>
+                    </tag>
+                    <tag><input id="speed" type="range" min="0" value="0.2" max="10" step="0.1"
+                                oninput="outputSpeedUpdate(value)"></input><br></br></tag>
+                    <tag> Wave Type:
+                    </tag>
+                    <select id="waveDropdown">
+                        <option id="Sine" selected="selected">Sine</option>
+                        <option id="Sawtooth">Sawtooth</option>
+                        <option id="Square">Square</option>
+                        <option id="Triangle">Triangle</option>
+                    </select>
+                </form>
+                <input onclick="ungreyParentDropdown()" type="checkbox" id="parentCheckbox" value="hasParent"
+                       selected="false">Moon Mode?<br>
+                <select id="orbitParent">
+                    <tag> Planet ID:
+                    </tag>
+                </select>
+                <br></br>
+                <button id="medium-btn" onclick="addPlanetButton()">Add Item to Space</button>
+                <br></br>
+                <button id="medium-btn" onclick="clearAllPlanets()">Clear Space</button>
+                <br></br>
+                <button id="medium-btn" onclick="startOrbiter()"> Begin</button>
+                <br></br>
+                <button id="medium-btn" onclick="stopOrbiter()">Pause</button>
+                <br></br>
+            </div>
+            <canvas id="canvasOne" float="left" width="1000" height="1000"></canvas>
+            <br></br>
+            <div class='card'>
+                Developed by Bradley PH Williams, Designed by Sam Lusted.
+                <br>Find a bug? Report it at<a href='mailto:BradleyW@artifexnet.co.uk'>
+                BradleyW@artifexnet.co.uk </a> </br>
+                <br> In the meantime, hit refresh. It solves 90% of known issues!</br>
+            </div>
         </div>
-        <div id="page-wrap">
-            <h1> Here's my portfolio..
-            </h1>
-            <div id = "soundOrbiter">
-                <h2> The Solar System of Rhythm and Vision V1.0.1 </h2>
-                <p>Source Code: <a href='https://github.com/Meggot/Meggot.github.io/blob/master/views/portfolio.html'> Link </a></p>
-                <p>Create your own solar systems, and it'll play its fingerprint back to you in visual and audio manner! 
-                    It is best used with headphones, as it uses stereo sound around the middle coordinate.
-                </p>
-                <div style="border: 1px solid" class="gameArea">
-                    <div id="gameControls">
-                        <div id="audioControls">
-                            <button id="small-btn" onclick="muteAll()"><p id="mute">Muted</p></button>
-                            <input type="checkbox" onclick="activeTrailCheckbox()" id="small-btn" checked="checked">Disable Trail</input>
-                            <input type="checkbox" onclick="activeGridLinesCheckbox()" id="small-btn">Disable Grid Lines</input>
-                            <!--<tag> Volume <output for="volume" id="volumeTell">50</output></tag>-->
-                            <!--<tag><input id="volume" type="range" min="0" value = "50" max="100"step="1" oninput="outputVolumeUpdate(value)"></input><br></br></tag>-->
-                            <audio id="ShortBleepSRC" src="../static/ShortBleep1.mp3" type="audio/mp3"></audio>
-                        </div>
-                        <div id="audioFile">
-                            <form id="musicSource">
-                                <tag><input type="radio" name="musicRadioButton" value="oscillator"> Oscillator </input></tag>
-                                <tag><input type="radio" name="musicRadioButton" value="strike"> Strike </input></tag>
-                            </form>
-                            <tag> Wave Type:
-                            </tag>
-                            <select id="musicFileSource">
-                                <option id="ShortBleep1" value="../static/ShortBleep1.mp3">ShortBleep1</option>
-                            </select>
-                        </div>
-                        <form id="newPlanetForm">
-                            <tag> Periapsis: <output for="periapsis" id="periapsisTell">0</output></tag>
-                            <tag><input id="periapsis" type="range" min="-240" value = "0" max="240"step="1" oninput="outputPeriapsisUpdate(value)"></input><br></br></tag>
-                            <!--<tag> Frequency <output for="frequency" id="frequencyTell">300</output></tag>
-                            <tag><input id="frequency" type="range" min="40" value = "300" max="3000"step="5" oninput="outputFrequencyUpdate(value)"></input><br></br></tag>-->
-                            <!--<tag> Speed Of Orbit: <input id="speed" type="number" label="Enter the speed of orbit" value="0.5" step="0.1"> </input><br></br></tag>-->
-                            <tag> Orbit Speed: <output for="speed" id="speedTell">0.2</output></tag>
-                            <tag><input id="speed" type="range" min="0" value = "0.2" max="10"step="0.1" oninput="outputSpeedUpdate(value)"></input><br></br></tag>
-                            <tag> Wave Type:
-                            </tag>
-                            <select id="waveDropdown">
-                                <option id="Sine" selected="selected">Sine</option>
-                                <option id="Sawtooth">Sawtooth</option>
-                                <option id="Square">Square</option>
-                                <option id="Triangle">Triangle</option>
-                            </select>
-                        </form>
-                        <input onclick="ungreyParentDropdown()" type="checkbox" id="parentCheckbox" value="hasParent" selected="false">Moon Mode?<br>
-                                <select id="orbitParent">
-                                    <tag> Planet ID: 
-                                    </tag>
-                                </select>
-                                <br></br>
-                                <button id="medium-btn" onclick="addPlanetButton()">Add Item to Space</button><br></br>
-                                <button id="medium-btn" onclick="clearAllPlanets()">Clear Space</button><br></br>
-                                <button id="medium-btn" onclick="startOrbiter()"> Begin</button><br></br>
-                                <button id="medium-btn" onclick="stopOrbiter()">Pause</button><br></br>
-                                </div>
-                                <canvas id="canvasOne" float="left" width="1000" height="1000"></canvas>
-                                <br></br>
-                                <div class ='card'>
-                                    Developed by Bradley PH Williams, Designed by Sam Lusted.
-                                    <br>Find a bug? Report it at<a href='mailto:BradleyW@artifexnet.co.uk'> BradleyW@artifexnet.co.uk </a> </br>
-                                    <br> In the meantime, hit refresh. It solves 90% of known issues!</br>
-                                </div>
-                                </div>
-                                </div>
-                                </div>
-                                </div>
-                                </body>
-                                </html>
+    </div>
+</div>
+</div>
+</body>
+</html>
